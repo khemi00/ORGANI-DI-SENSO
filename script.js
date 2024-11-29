@@ -1,48 +1,67 @@
-// Carica le domande dal file JSON
-fetch('domande.json')
-    .then(response => response.json())
-    .then(data => {
-        generaDomande(data);
-    })
-    .catch(error => console.error('Errore nel caricamento delle domande:', error));
+// Funzione per caricare il database delle domande
+async function caricaDomande() {
+    const response = await fetch('questions.json'); // Carica il file JSON
+    const questions = await response.json(); // Converte la risposta in JSON
+    return questions;
+}
 
-// Genera le domande dinamicamente
-function generaDomande(domande) {
-    const quizForm = document.getElementById('quiz-form');
-    domande.forEach((domanda, index) => {
+// Funzione per generare il quiz dinamicamente
+async function generaQuiz() {
+    const questions = await caricaDomande(); // Ottieni le domande
+    const form = document.getElementById('quiz-form');
+    form.innerHTML = ''; // Svuota il contenuto attuale
+
+    questions.forEach((item, index) => {
+        // Crea un contenitore per ogni domanda
         const questionDiv = document.createElement('div');
         questionDiv.classList.add('question');
 
+        // Aggiungi il testo della domanda
         const questionText = document.createElement('p');
-        questionText.textContent = `${index + 1}. ${domanda.domanda}`;
+        questionText.textContent = `${index + 1}. ${item.question}`;
         questionDiv.appendChild(questionText);
 
-        domanda.opzioni.forEach((opzione, opzioneIndex) => {
+        // Aggiungi le opzioni di risposta
+        item.options.forEach((option, i) => {
             const label = document.createElement('label');
             const input = document.createElement('input');
             input.type = 'radio';
             input.name = `q${index}`;
-            input.value = opzione.corretta ? 1 : 0;
+            input.value = i;
             label.appendChild(input);
-            label.append(` ${opzione.testo}`);
+            label.appendChild(document.createTextNode(option));
             questionDiv.appendChild(label);
             questionDiv.appendChild(document.createElement('br'));
         });
 
-        quizForm.appendChild(questionDiv);
+        form.appendChild(questionDiv);
     });
+
+    // Aggiungi il pulsante per inviare le risposte
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = 'Invia Risposte';
+    button.classList.add('button');
+    button.onclick = () => calcolaPunteggio(questions);
+    form.appendChild(button);
 }
 
-// Calcola il punteggio
-function calcolaPunteggio() {
+// Funzione per calcolare il punteggio
+function calcolaPunteggio(questions) {
     const form = document.getElementById('quiz-form');
     const resultDiv = document.getElementById('result');
     let score = 0;
 
     const answers = new FormData(form);
-    for (let value of answers.values()) {
-        score += parseInt(value);
-    }
+    questions.forEach((item, index) => {
+        const userAnswer = answers.get(`q${index}`);
+        if (parseInt(userAnswer) === item.correct) {
+            score++;
+        }
+    });
 
-    resultDiv.textContent = `Il tuo punteggio è: ${score}`;
+    resultDiv.textContent = `Il tuo punteggio è: ${score} su ${questions.length}`;
 }
+
+// Carica il quiz quando la pagina viene caricata
+document.addEventListener('DOMContentLoaded', generaQuiz);
