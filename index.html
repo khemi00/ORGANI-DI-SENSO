@@ -41,20 +41,6 @@
         <button type="button" class="button" onclick="calcolaPunteggio()">Invia Risposte</button>
     </form>
     <div id="result" class="result"></div>
-
-    <script>
-        function calcolaPunteggio() {
-            const form = document.getElementById('quiz-form');
-            const resultDiv = document.getElementById('result');
-            let score = 0;
-
-            const answers = new FormData(form);
-            for (let value of answers.values()) {
-                score += parseInt(value);
-            }
-
-            resultDiv.textContent = `Il tuo punteggio è: ${score}`;
-        }
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
