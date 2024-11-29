@@ -1,14 +1,19 @@
-// Funzione per caricare il database delle domande
-async function caricaDomande() {
-    // URL assoluto per GitHub Pages
-    const response = await fetch('https://tuo-username.github.io/nome-repository/questions.json');
-    const questions = await response.json();
-    return questions;
-}
+// Array di domande e risposte
+const questions = [
+    {
+        question: "Qual è la capitale d'Italia?",
+        options: ["Milano", "Roma", "Napoli"],
+        correct: 1
+    },
+    {
+        question: "Qual è il risultato di 2+2?",
+        options: ["3", "4", "5"],
+        correct: 1
+    }
+];
 
 // Funzione per generare il quiz dinamicamente
-async function generaQuiz() {
-    const questions = await caricaDomande(); // Ottieni le domande
+function generaQuiz() {
     const form = document.getElementById('quiz-form');
     form.innerHTML = ''; // Svuota il contenuto attuale
 
@@ -43,12 +48,12 @@ async function generaQuiz() {
     button.type = 'button';
     button.textContent = 'Invia Risposte';
     button.classList.add('button');
-    button.onclick = () => calcolaPunteggio(questions);
+    button.onclick = () => calcolaPunteggio();
     form.appendChild(button);
 }
 
 // Funzione per calcolare il punteggio
-function calcolaPunteggio(questions) {
+function calcolaPunteggio() {
     const form = document.getElementById('quiz-form');
     const resultDiv = document.getElementById('result');
     let score = 0;
