@@ -1,7 +1,8 @@
 // Funzione per caricare il database delle domande
 async function caricaDomande() {
-    const response = await fetch('questions.json'); // Carica il file JSON
-    const questions = await response.json(); // Converte la risposta in JSON
+    // URL assoluto per GitHub Pages
+    const response = await fetch('https://tuo-username.github.io/nome-repository/questions.json');
+    const questions = await response.json();
     return questions;
 }
 
