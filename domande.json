@@ -1,0 +1,18 @@
+[
+    {
+        "domanda": "Qual è la capitale d'Italia?",
+        "opzioni": [
+            { "testo": "Milano", "corretta": false },
+            { "testo": "Roma", "corretta": true },
+            { "testo": "Napoli", "corretta": false }
+        ]
+    },
+    {
+        "domanda": "Qual è il risultato di 2+2?",
+        "opzioni": [
+            { "testo": "3", "corretta": false },
+            { "testo": "4", "corretta": true },
+            { "testo": "5", "corretta": false }
+        ]
+    }
+]
