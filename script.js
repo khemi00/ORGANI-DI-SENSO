@@ -5,7 +5,7 @@ const questions = [
         "correct": 0
     },
     {
-        "question": "L'otite esterna:",
+        "question": "L'otite ESTERNA:",
         "options": ["Deriva sempre da un raffreddore", "Può derivare da un raffreddore", "Non ha rapporti diretti con il raffreddore"],
         "correct": 1
     }
@@ -73,7 +73,6 @@ function generaQuiz() {
 
 function calcolaPunteggio() {
     const form = document.getElementById('quiz-form');
-    const resultDiv = document.getElementById('result');
     let score = 0;
 
     const answers = new FormData(form);
@@ -82,15 +81,24 @@ function calcolaPunteggio() {
         const questionDiv = document.querySelectorAll('.question')[index]; // Seleziona il div della domanda
         const userAnswer = answers.get(`q${index}`);
 
+        // Rimuovi eventuali feedback precedenti
+        const existingFeedback = questionDiv.querySelector('.feedback');
+        if (existingFeedback) {
+            existingFeedback.remove();
+        }
+
+        // Crea un elemento per il feedback
         const feedback = document.createElement('span');
+        feedback.classList.add('feedback');
         feedback.style.marginLeft = '10px';
 
+        // Verifica la risposta e aggiungi il feedback
         if (parseInt(userAnswer) === item.correct) {
             score++;
-            feedback.className = 'correct';
+            feedback.className = 'feedback correct';
             feedback.textContent = '✓ Risposta corretta';
         } else {
-            feedback.className = 'wrong';
+            feedback.className = 'feedback wrong';
             feedback.textContent = `✗ Sbagliata. Corretto: ${item.options[item.correct]}`;
         }
 
@@ -98,11 +106,9 @@ function calcolaPunteggio() {
         questionDiv.appendChild(feedback);
     });
 
-    // Mostra il punteggio totale
-    const finalScore = document.createElement('h2');
-    finalScore.textContent = `Il tuo punteggio è: ${score} su ${selectedQuestions.length}`;
-    resultDiv.innerHTML = ''; // Svuota i risultati precedenti
-    resultDiv.appendChild(finalScore);
+    // Mostra il punteggio totale in alto
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = `<h2>Il tuo punteggio è: ${score} su ${selectedQuestions.length}</h2>`;
 }
 
 document.addEventListener('DOMContentLoaded', generaQuiz);
