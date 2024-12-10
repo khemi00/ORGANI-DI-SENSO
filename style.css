@@ -11,10 +11,17 @@ body {
 
 .correct {
     color: green;
+    font-weight: bold;
 }
 
 .wrong {
     color: red;
+    font-weight: bold;
+}
+
+.feedback {
+    margin-left: 10px;
+    display: inline-block;
 }
 
 .button {
