@@ -77,27 +77,32 @@ function calcolaPunteggio() {
     let score = 0;
 
     const answers = new FormData(form);
-    resultDiv.innerHTML = '';
 
     selectedQuestions.forEach((item, index) => {
+        const questionDiv = document.querySelectorAll('.question')[index]; // Seleziona il div della domanda
         const userAnswer = answers.get(`q${index}`);
-        const questionResult = document.createElement('p');
+
+        const feedback = document.createElement('span');
+        feedback.style.marginLeft = '10px';
 
         if (parseInt(userAnswer) === item.correct) {
             score++;
-            questionResult.innerHTML = `<span class="correct">${index + 1}. Corretta</span>`;
+            feedback.className = 'correct';
+            feedback.textContent = '✓ Risposta corretta';
         } else {
-            questionResult.innerHTML = `
-                <span class="wrong">${index + 1}. Sbagliata</span> - 
-                La risposta corretta è: ${item.options[item.correct]}
-            `;
+            feedback.className = 'wrong';
+            feedback.textContent = `✗ Sbagliata. Corretto: ${item.options[item.correct]}`;
         }
-        resultDiv.appendChild(questionResult);
+
+        // Aggiungi il feedback accanto alla domanda
+        questionDiv.appendChild(feedback);
     });
 
+    // Mostra il punteggio totale
     const finalScore = document.createElement('h2');
     finalScore.textContent = `Il tuo punteggio è: ${score} su ${selectedQuestions.length}`;
-    resultDiv.insertBefore(finalScore, resultDiv.firstChild);
+    resultDiv.innerHTML = ''; // Svuota i risultati precedenti
+    resultDiv.appendChild(finalScore);
 }
 
 document.addEventListener('DOMContentLoaded', generaQuiz);
