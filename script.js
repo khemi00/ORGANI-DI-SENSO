@@ -2990,7 +2990,7 @@ const questions = [
             "primo molare inferiore di sinistra",
             "secondo molare inferiore di sinistra"
         ],
-        "correct": 2
+        "correct": 0
     },
     {
         "question": "A quale ascesso si riferisce la seguente sintomatologia: “test di vitalità positivi, presenza di una tasca sondabile, presenza di una tumefazione localizzata e coronale”:",
