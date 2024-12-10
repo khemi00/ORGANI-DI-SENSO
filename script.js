@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Dinamico</title>
     <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
         .question { margin-bottom: 15px; }
         .correct { color: green; }
         .wrong { color: red; }
@@ -15,31 +16,22 @@
     <h1>Quiz</h1>
     <form id="quiz-form"></form>
     <div id="result"></div>
-    <script>
-        // Lista completa delle domande (JSON) - RICORDA DI SOSTITUIRE QUESTO BLOCCO CON LE TUE DOMANDE
-        const questions = [
-           // Array di domande e risposte
-    {
-        "question": "Qual è la patologia più frequente dell’orecchio esterno?",
-        "options": [
-            "Otite esterna",
-            "Carcinoma basocellulare",
-            "Colesteatoma"
-        ],
-        "correct": 0
-    },
-    {
-        "question": "L'otite esterna:",
-        "options": [
-            "Deriva sempre da un raffreddore",
-            "Può derivare da un raffreddore",
-            "Non ha rapporti diretti con il raffreddore"
-        ],
-        "correct": 1
-    }
-];
 
-        // Funzione per mischiare un array
+    <script>
+        const questions = [
+            {
+                "question": "Qual è la patologia più frequente dell’orecchio esterno?",
+                "options": ["Otite esterna", "Carcinoma basocellulare", "Colesteatoma"],
+                "correct": 0
+            },
+            {
+                "question": "L'otite esterna:",
+                "options": ["Deriva sempre da un raffreddore", "Può derivare da un raffreddore", "Non ha rapporti diretti con il raffreddore"],
+                "correct": 1
+            }
+        ];
+
+        // Mischia un array
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -47,18 +39,17 @@
             }
         }
 
-        // Funzione per selezionare 40 domande a caso
+        // Prendi 40 domande a caso (o meno se sono insufficienti)
         function getRandomQuestions(allQuestions, num) {
             shuffleArray(allQuestions);
             return allQuestions.slice(0, num);
         }
 
-        // Genera il quiz
         const selectedQuestions = getRandomQuestions(questions, 40);
 
         function generaQuiz() {
             const form = document.getElementById('quiz-form');
-            form.innerHTML = ''; // Svuota il contenuto attuale
+            form.innerHTML = '';
 
             selectedQuestions.forEach((item, index) => {
                 const questionDiv = document.createElement('div');
@@ -68,18 +59,18 @@
                 questionText.textContent = `${index + 1}. ${item.question}`;
                 questionDiv.appendChild(questionText);
 
-                // Mischia le opzioni
-                const options = [...item.options];
-                shuffleArray(options);
+                // Mischia le opzioni, mantenendo un mapping tra opzioni mescolate e risposta corretta
+                const originalOptions = item.options.map((opt, i) => ({ text: opt, index: i }));
+                shuffleArray(originalOptions);
 
-                options.forEach((option, i) => {
+                originalOptions.forEach((option) => {
                     const label = document.createElement('label');
                     const input = document.createElement('input');
                     input.type = 'radio';
                     input.name = `q${index}`;
-                    input.value = item.options.indexOf(option); // Mantiene il valore originale
+                    input.value = option.index; // Mantiene l'indice originale
                     label.appendChild(input);
-                    label.appendChild(document.createTextNode(option));
+                    label.appendChild(document.createTextNode(option.text));
                     questionDiv.appendChild(label);
                     questionDiv.appendChild(document.createElement('br'));
                 });
@@ -101,7 +92,7 @@
             let score = 0;
 
             const answers = new FormData(form);
-            resultDiv.innerHTML = ''; // Svuota i risultati precedenti
+            resultDiv.innerHTML = '';
 
             selectedQuestions.forEach((item, index) => {
                 const userAnswer = answers.get(`q${index}`);
