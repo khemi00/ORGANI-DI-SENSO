@@ -3843,7 +3843,7 @@ const questions = [
             "Il IV nervo cranico",
             "Il III nervo cranico"
         ],
-        "correct": 1
+        "correct": 2
     },
     {
         "question": "In un PS, nel dubbio che un paziente cosciente con sintomi neuro abbia un’emianopsia omonima dovuta a un ictus, si evidenzia con:",
